@@ -1,0 +1,121 @@
+*{
+    box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+}
+
+:root {
+  --color-primario: #2196F3;  /* Azul */
+  --color-secundario: #FF4081; /* Rosa */
+  --color-terciario: #03A9F4; /* Turquesa */
+  --color-acento: #FFEB3B;  /* Amarillo */
+  --color-gris-claro: #F5F5F5; /* Gris claro */
+}
+
+body{
+    background: linear-gradient(to bottom, var(--color-secundario), var(--color-primario));
+    height: 100vh;
+    font-family: 'Outfit', sans-serif;
+}
+
+.container{
+    max-width: 80%;
+    width: 400px;
+    height: 600px;
+    margin: 0 auto;
+}
+
+/*perfil*/
+
+.perfil h1{
+    color: var(--color-gris-claro);
+}
+
+.perfil span {
+    color: var(--color-gris-claro);
+    letter-spacing: 1px;
+}
+
+#fecha {
+    color: var(--color-gris-claro);
+    padding: 50px 0 5px 0;;
+}
+
+/*Agregar tarea */
+
+.agregar-tarea{
+background-color: var(--color-gris-claro);
+border-radius: 15px;
+height: 70px;
+display: flex;
+align-items: center;
+padding: 10px;
+gap: 70px;
+margin: 40px 0;
+
+}
+
+.agregar-tarea input{
+    width: 100%;
+    height: 100%;
+    border-radius: 8px;
+    border: none;
+    background-color: var(--color-gris-claro);
+
+}
+
+.agregar-tarea i {
+    font-size: 50px ;
+    color: var(--color-secundario);
+
+}
+
+.agregar-tarea i:hover{
+    transform: scale(1.1);
+    cursor: pointer;
+}
+
+.agregar-tarea input::placeholder{
+    font-size: 1.1rem;
+    color: var(--color-secundario);
+}
+
+
+/*Seccion tarea*/
+.seccion-tarea h3{
+    color: var(--color-gris-claro);
+    margin-bottom: 20px;
+}
+
+
+.seccion-tarea li{
+
+    display: flex;
+    background: linear-gradient(to bottom, var(--color-primario), var(--color-terciario));
+    border-radius: 15px;
+    padding: 10px;
+    align-items: center;
+    justify-content: space-between;
+    margin: 5px 0;
+    color: var(--color-gris-claro);
+
+}
+
+.seccion-tarea i {
+    font-size: 25px;
+
+}
+
+.seccion-tarea i:hover{
+    color: var(--color-acento);
+    cursor: pointer;
+}
+
+.seccion-tarea > ul p{
+    font-size: 1.2rem;
+}
+
+.line-through{
+    text-decoration: line-through;
+    color: var(--color-secundario);
+}
