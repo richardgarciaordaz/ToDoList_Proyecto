@@ -1,142 +1,144 @@
 const fecha = document.querySelector('#fecha')
 const lista = document.querySelector('#lista')
+const elemento = document.querySelector('#elemento')
 const input = document.querySelector('#input')
 const botonEnter = document.querySelector('#boton-enter')
 const check = 'fa-check-circle'
 const uncheck = 'fa-circle'
-const LineThrough = 'line-through'
-let id
+const lineThrough = 'line-through'
 let LIST
 
+let id // para que inicie en 0 cada tarea tendra un id diferente
+
+//creacion de fecha actualizada 
+
+const FECHA = new Date ()
+fecha.innerHTML = FECHA.toLocaleDateString('es-MX',{weekday: 'long', month: 'short', day:'numeric'})
 
 
-// Creacion de fecha
-const FECHA = new Date()
-fecha.innerHTML=FECHA.toLocaleDateString('es-MX',{weekday:'long',month:'short',day:'numeric'})
 
 
-//funcion agregar tarea
-function agregarTarea (tarea,id,realizado,eliminado) {
 
-    if(eliminado) {return}
 
-    const REALIZADO = realizado ?check :uncheck 
-    const LINE = realizado ?LineThrough :''
 
-    const elemento = `<li id="elemento">
-    <i class="far ${REALIZADO}" data="realizado" id="${id}"></i>
-    <p class="text ${LINE}">${tarea}</p>
-    <i class="fas fa-trash de" data="eliminado" id="0"></i>
+// funcion de agregar tarea 
+
+function agregarTarea( tarea,id,realizado,eliminado) {
+    if(eliminado) {return} // si existe eliminado es true si no es false 
+
+    const REALIZADO = realizado ? check : uncheck // si realizado es verdadero check si no uncheck
+
+    const LINE = realizado ? lineThrough : '' 
+
+    const elemento = `
+                        <li id="elemento">
+                        <i class="far ${REALIZADO}" data="realizado" id="${id}"></i>
+                        <p class="text ${LINE}">${tarea}</p>
+                        <i class="fas fa-trash de" data="eliminado" id="${id}"></i> 
                         </li>
-                     `
-    lista.insertAdjacentHTML("beforeend", elemento)
+                    `
+    lista.insertAdjacentHTML("beforeend",elemento)
+
 }
 
-//funcion de tarea Realizada
+
+// funcion de Tarea Realizada 
 
 function tareaRealizada(element) {
     element.classList.toggle(check)
     element.classList.toggle(uncheck)
-    element.parentNode.querySelector('.text').classList.toggle(LineThrough)
-    LIST[element.id].realizado = LIST[element.id].realizado ?false :true
+    element.parentNode.querySelector('.text').classList.toggle(lineThrough)
+    LIST[element.id].realizado = LIST[element.id].realizado ?false :true //Si
+   // console.log(LIST)
+   // console.log(LIST[element.id])
+   // console.log(LIST[element.id].realizado)
 }
 
-//funcion de tarea eliminada
 function tareaEliminada(element){
+   // console.log(element.parentNode)
+   // console.log(element.parentNode.parentNode)
     element.parentNode.parentNode.removeChild(element.parentNode)
-    LIST(element.id).eliminado = true
-    
+    LIST[element.id].eliminado = true
+    console.log(LIST)
 }
 
-function tareaEliminada(element) {
-    // Mostrar el modal de confirmación
-    const tarea = element.parentNode.querySelector('.text').textContent;
-    document.getElementById('tarea-a-eliminar').textContent = tarea;
-    const modal = document.getElementById('modal-confirmacion');
-    modal.style.display = 'block';
 
-    // Agregar eventos a los botones del modal
-    const btnCancelar = document.getElementById('btn-cancelar');
-    const btnEliminar = document.getElementById('btn-eliminar');
 
-    btnCancelar.addEventListener('click', () => {
-        modal.style.display = 'none';
-    });
 
-    btnEliminar.addEventListener('click', () => {
-        // Eliminar la tarea de la lista y del localStorage
-        const elemento = element.parentNode;
-        lista.removeChild(elemento);
-        LIST.find(item => item.id === parseInt(element.id)).eliminado = true;
-        localStorage.setItem('TODO', JSON.stringify(LIST));
-        modal.style.display = 'none';
-    });
-}
 
-botonEnter.addEventListener('click', () => {
+// crear un evento para escuchar el enter y para habilitar el boton 
+
+botonEnter.addEventListener('click', ()=> {
     const tarea = input.value
-    if(tarea) {
-        agregarTarea(tarea,id,false, false)
+    if(tarea){
+        agregarTarea(tarea,id,false,false)
         LIST.push({
-            nombre: tarea,
-            id:id,
-            realizado:false,
-            eliminado:false
+            nombre : tarea,
+            id : id,
+            realizado : false,
+            eliminado : false
         })
+        localStorage.setItem('TODO',JSON.stringify(LIST))
+        id++
+        input.value = ''
     }
 
-    localStorage.setItem('TODO', JSON.stringify(LIST))
-    input.value=''
-    id++
 })
 
-document.addEventListener('keyup', function(event) {
-    if(event.key=='Enter') {
+document.addEventListener('keyup', function (event) {
+    if (event.key=='Enter'){
         const tarea = input.value
         if(tarea) {
             agregarTarea(tarea,id,false,false)
-            LIST.push({
-                nombre: tarea,
-                id:id,
-                realizado:false,
-                eliminado:false
-            })
-        }
-
-        localStorage.setItem('TODO', JSON.stringify(LIST))
-        input.value=''
+        LIST.push({
+            nombre : tarea,
+            id : id,
+            realizado : false,
+            eliminado : false
+        })
+        localStorage.setItem('TODO',JSON.stringify(LIST))
+     
+        input.value = ''
         id++
+        console.log(LIST)
+        }
     }
-})
-
-lista.addEventListener('click', function(event){
-    const element = event.target
-    const elementData = element.attributes .data.value
-  if(elementData==='realizado') {
-    tareaRealizada(element) 
-  }
-
-  else if(elementData ==='eliminado') {
-    tareaEliminada(element)
-  }
-  localStorage.setItem('TODO', JSON.stringify(LIST))
+    
 })
 
 
-//local storage get item
+lista.addEventListener('click',function(event){
+    const element = event.target 
+    const elementData = element.attributes.data.value
+    console.log(elementData)
+    
+    if(elementData == 'realizado') {
+        tareaRealizada(element)
+    }
+    else if(elementData == 'eliminado') {
+        tareaEliminada(element)
+        console.log("elimnado")
+    }
+    localStorage.setItem('TODO',JSON.stringify(LIST))
+})
+
+
+
 
 let data = localStorage.getItem('TODO')
-if(data) {
-    LIST=JSON.parse(data)
+if(data){
+    LIST = JSON.parse(data)
+    console.log(LIST)
     id = LIST.length
     cargarLista(LIST)
-}else{
+}else {
     LIST = []
-    id=0
+    id = 0
 }
 
-function cargarLista(DATA){
-    DATA.forEach(function(i){
-        agregarTarea(i.nombre,i.id,i.realizado,i.eliminado)
+
+function cargarLista(array) {
+    array.forEach(function(item){
+        agregarTarea(item.nombre,item.id,item.realizado,item.eliminado)
     })
 }
